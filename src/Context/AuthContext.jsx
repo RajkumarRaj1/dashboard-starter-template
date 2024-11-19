@@ -44,6 +44,7 @@ export default function AuthContextProvider({ children }) {
     setIsLoggedIn,
     setCurrentUser,
     currentUser,
+    decodedToken
   };
 
   return <AuthContext.Provider value={values}>{children}</AuthContext.Provider>;

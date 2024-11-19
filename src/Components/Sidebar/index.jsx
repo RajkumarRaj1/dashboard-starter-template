@@ -1,66 +1,38 @@
 import { useRef } from "react";
 import Icons from "../../Assets/icons";
 import NavItemExpandable from "../NavItem/NavItemExpandable";
-import { useAuthContext } from '../../Context/AuthContext';
+import { useAuthContext } from "../../Context/AuthContext";
 import { useBrandContext } from "../../Context/BrandContext";
 
-const PRODUCT_ROUTES = [
+const USERS = [
   {
-    label: "Create Product",
-    to: "/dashboard/products/create",
-    id: "createProduct",
-  },
-  {
-    label: "Manage Products",
-    to: "/dashboard/products",
-    id: "manageProducts",
-  },
-];
-const OFFER_ROUTES = [
-  {
-    label: "Create Offer",
-    to: "/dashboard/offers/create",
-    id: "createProduct",
-  },
-  {
-    label: "Manage Offers",
-    to: "/dashboard/offers",
-    id: "manageOffers",
-  },
-];
-const FOOD_ROUTES = [{
-    label: "Create Food",
-    to: "/dashboard/food/create",
-    id: "createFood",
-  },
-  {
-    label: "Manage Foods",
-    to: "/dashboard/food/manage",
-    id: "manageFoods",
-  },
-];
-const ORDER_ROUTES = [
-  {
-    label: "Manage Orders",
-    to: "/dashboard/orders/manage",
-    id: "manageOrders",
-  },
-];
-const USER_ROUTES = [{
     label: "Create User",
-    to: "/dashboard/user/create",
+    to: "/dashboard/users/create",
     id: "createUser",
   },
   {
-    label: "Manage Users",
-    to: "/dashboard/user/manage",
+    label: "Manage User",
+    to: "/dashboard/users/manage",
     id: "manageUser",
+  },
+];
+
+const BOOKINGS = [
+  {
+    label: "Create Booking",
+    to: "/dashboard/bookings/create",
+    id: "createBooking",
+  },
+  {
+    label: "Manage Bookings",
+    to: "/dashboard/bookings/manage",
+    id: "manageBookings",
   },
 ];
 
 export default function Sidebar() {
   const sidebarRef = useRef(null);
-  const {currentUser = {}} = useAuthContext();
+  const { currentUser = {}, decodedToken = {} } = useAuthContext();
   const { brand = {} } = useBrandContext();
   function handleSidebarToggle() {
     if (sidebarRef.current.classList.contains("toggled")) {
@@ -78,38 +50,26 @@ export default function Sidebar() {
     >
       <div className="sidebar-brand d-flex align-items-center justify-content-center">
         <div className="sidebar-brand-icon rotate-n-15">
-          <i className="fas fa-laugh-wink"></i>
+          <h1 className="">saloon</h1>
         </div>
         <div className="sidebar-brand-text mx-3">{brand?.name}</div>
       </div>
 
       <hr className="sidebar-divider" />
 
-      <NavItemExpandable
-        id="products"
-        label="Products"
-        routes={PRODUCT_ROUTES}
-      />
-      <NavItemExpandable id="offer" label="Offers" routes={OFFER_ROUTES} />
-      <NavItemExpandable id = "offer"
-      label = "Foods"
-      routes = {
-        FOOD_ROUTES
-      }
-      />
-      <NavItemExpandable 
-        id="orders"
-        label="Orders"
-        routes={ORDER_ROUTES}
-      />
-      {currentUser && currentUser.isSuperAdmin 
-        ? <NavItemExpandable 
-        id="users"
-        label = "Users"
-        routes = {
-          USER_ROUTES
-        }
-      />: null}
+      {decodedToken ?.role !== "customer" ? 
+        <div>
+          <NavItemExpandable
+            id="users"
+            label="Users"
+            routes={USERS}
+          />
+            <NavItemExpandable
+              id="bookings"
+              label="Bookings"
+              routes={BOOKINGS}
+            />
+          </div>: null}
 
       <hr className="sidebar-divider d-none d-md-block" />
 
